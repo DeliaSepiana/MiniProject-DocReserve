@@ -4,7 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project/viewmodels/welcome_viewmodel.dart';
 
 class WelcomePage extends StatefulWidget {
+  const WelcomePage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _WelcomePageState createState() => _WelcomePageState();
 }
 
@@ -31,7 +34,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       body: Container(
         decoration:
-            BoxDecoration(color: const Color.fromARGB(255, 238, 192, 198)),
+            const BoxDecoration(color: Color.fromARGB(255, 238, 192, 198)),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             height: 300,
                             width: 300,
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: Text(
@@ -69,7 +72,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               style: GoogleFonts.spaceGrotesk(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 29, 116, 92),
+                                color: const Color.fromARGB(255, 29, 116, 92),
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -84,18 +87,24 @@ class _WelcomePageState extends State<WelcomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: _buildPageIndicator(),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               if (_showGetStartedButton)
                 CupertinoButton(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  color: const Color.fromARGB(255, 29, 116, 92),
+                  onPressed: () {
+                    // Implementasi fungsi ketika tombol Get Started ditekan
+                    viewModel.goToLoginPage(context);
+                  },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Icon(
+                      const Icon(
                         CupertinoIcons.arrow_right_circle_fill,
                         color: Colors.white,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         'Get Started',
                         style: GoogleFonts.spaceGrotesk(
@@ -105,11 +114,6 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ],
                   ),
-                  color: Color.fromARGB(255, 29, 116, 92),
-                  onPressed: () {
-                    // Implementasi fungsi ketika tombol Get Started ditekan
-                    viewModel.goToLoginPage(context);
-                  },
                 ),
               if (!_showGetStartedButton)
                 Row(
@@ -120,7 +124,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         'Skip',
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 18,
-                          color: Color.fromARGB(255, 29, 116, 92),
+                          color: const Color.fromARGB(255, 29, 116, 92),
                         ),
                       ),
                       onPressed: () {
@@ -134,18 +138,18 @@ class _WelcomePageState extends State<WelcomePage> {
                         'Continue',
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 18,
-                          color: Color.fromARGB(255, 29, 116, 92),
+                          color: const Color.fromARGB(255, 29, 116, 92),
                         ),
                       ),
                       onPressed: () {
                         _pageController.nextPage(
-                            duration: Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 500),
                             curve: Curves.ease);
                       },
                     ),
                   ],
                 ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -163,12 +167,12 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Widget _indicator(bool isActive) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
       height: 8,
       width: 8,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isActive ? Color.fromARGB(255, 29, 116, 92) : Colors.grey,
+        color: isActive ? const Color.fromARGB(255, 29, 116, 92) : Colors.grey,
       ),
     );
   }
