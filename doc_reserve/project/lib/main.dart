@@ -1,45 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:project/viewmodels/bottomnavbar_viewmodel.dart';
-import 'package:project/views/bottom_navbar.dart';
 import 'package:project/views/chatmessage_page.dart';
-import 'package:project/views/reservation_page.dart';
-import 'package:project/views/welcome_page.dart';
-import 'package:provider/provider.dart';
 import 'package:project/views/home_page.dart';
-import 'package:project/views/login_page.dart';
-import 'package:project/viewmodels/login_viewmodel.dart';
+import 'package:project/views/reservation_page.dart';
 import 'package:project/views/schedule_list_page.dart';
+import 'package:provider/provider.dart';
+import 'package:project/views/bottom_navbar.dart';
+import 'package:project/views/login_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => LoginViewModel()),
-        ChangeNotifierProvider(create: (context) => BottomNavBarViewModel()),
-        // ChangeNotifierProvider(create: (context)) => HistoryViewModel()
-        // Add other providers if needed for other ViewModels
+        ChangeNotifierProvider(create: (context) => BottomNavBarModel()),
+
+        // Tambahkan provider lain jika diperlukan untuk ViewModel lain
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "Doc's Reserve",
-        initialRoute: '/welcome',
+        title: 'Dokter Reservasi',
+        initialRoute: '/',
         routes: {
-          '/': (context) => BottomNavBar(),
-          '/welcome': (context) => const WelcomePage(),
+          '/': (context) => BottomNav(),
           '/login': (context) => LoginPage(),
-          '/home': (context) => HomePage(),
+          '/home': (context) => HomePage(key: UniqueKey()),
           '/history': (context) => const ReservationPage(),
           '/schedule': (context) => const ScheduleListPage(),
           '/reservation': (context) => const ReservationPage(),

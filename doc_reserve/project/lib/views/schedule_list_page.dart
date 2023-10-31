@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:project/custom_appbar.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:project/models/schedule_list.dart';
 
 class ScheduleListPage extends StatefulWidget {
@@ -73,124 +72,134 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomAppBarBody(
-      title: "Jadwal Dokter",
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 8),
-                    child: Container(
-                      height: 70,
-                      width: 70,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/doctor.png"),
-                          fit: BoxFit.contain,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          "Jadwal Praktek Dokter",
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: const Color.fromARGB(255, 29, 116, 92),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Icon(
+                            LineIcons.arrowCircleLeft,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Dental Clinic",
-                        style: GoogleFonts.spaceGrotesk(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: const Color.fromARGB(255, 29, 116, 92),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Schedule',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        SizedBox(height: 8),
+                        Text(
+                          'Docs Reservations',
+                          style: TextStyle(color: Colors.blue, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 50),
               Expanded(
                 child: ListView.builder(
                   itemCount: scheduleItems.length,
                   itemBuilder: (context, index) {
                     final day = scheduleItems[index];
 
-                    return Card(
-                      elevation: 2,
-                      margin: const EdgeInsets.all(10),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: avatarColors[
-                                          index % avatarColors.length],
-                                      child: Text(day.day[0]),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          day.day,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: avatarColors[
+                                            index % avatarColors.length],
+                                        child: Text(
+                                          day.day[0],
+                                          style: TextStyle(color: Colors.white),
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                if (!day.isDayOff)
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      showReserveDialog(day.day);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.green,
-                                    ),
-                                    child: const Text("Reservasi"),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            day.day,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                if (day.isDayOff)
-                                  const Text(
-                                    "Day Off",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 16,
+                                  if (!day.isDayOff)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue[200],
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          showReserveDialog(day.day);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.blue,
+                                        ),
+                                        icon: Icon(LineIcons.calendarCheck),
+                                        label: Text("Reservasi"),
+                                      ),
                                     ),
-                                  ),
-                              ],
-                            ),
-                          ],
+                                  if (day.isDayOff)
+                                    Text(
+                                      "Day Off",
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

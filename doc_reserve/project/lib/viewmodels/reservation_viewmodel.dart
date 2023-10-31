@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:project/models/reservation.dart';
 import 'package:project/utils/history_shared_preferences-utils.dart';
 
-class ReservationViewModel {
+class ReservationViewModel with ChangeNotifier {
   final HistorySharedPreferencesUtils _historySharedPreferencesUtils =
       HistorySharedPreferencesUtils();
 

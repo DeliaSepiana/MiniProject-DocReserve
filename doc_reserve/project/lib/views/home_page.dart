@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:project/custom_appbar.dart';
+import 'package:lottie/lottie.dart';
+import 'package:project/utils/category_card.dart';
+import 'package:project/utils/doctor_card.dart';
 import 'package:project/viewmodels/home_viewmodel.dart';
+import 'package:project/views/chatmessage_page.dart';
+import 'package:project/views/profile_page.dart';
+import 'package:project/views/reservation_page.dart';
+import 'package:project/views/schedule_list_page.dart';
 
 class HomePage extends StatefulWidget {
   final HomeViewModel viewModel = HomeViewModel();
 
-  HomePage({super.key});
+  HomePage({required Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -15,255 +20,235 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return CustomAppBarBody(
-      title: "Doc's Reserve",
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      height: 50,
-                      width: 70,
-                    ),
-                    const SizedBox(width: 8),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Selamat datang di",
-                          style: GoogleFonts.spaceGrotesk(
+                          'Docs Reserve',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: const Color.fromARGB(255, 29, 116, 92),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Text(
-                          "Doc's Reserve Dental Clinic",
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: const Color.fromARGB(255, 29, 116, 92),
+                          'Welcome, Delia Sepiana',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 12,
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
-                const Divider(),
-                const SizedBox(height: 16),
-                Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          height: 200,
-                          child: Image.asset(
-                            "assets/images/Doctor.png",
-                            alignment: Alignment.centerLeft,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProfilePage(), // Navigasi ke halaman profil
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue[200],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.blue,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "drg. Anindya Masitta",
-                            style: GoogleFonts.spaceGrotesk(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: const Color.fromARGB(255, 29, 116, 92),
-                              textStyle: const TextStyle(height: 4),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 100,
+                        width: 100,
+                        child: Lottie.network(
+                          'https://lottie.host/8fa3c648-163a-49d2-981e-5ed194e64e12/mnKVtijzqy.json',
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'How do you feel?',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.child_care,
-                                color: Color.fromARGB(255, 115, 117, 115),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "Spesialis Gigi Anak",
-                                style: GoogleFonts.spaceGrotesk(
-                                  fontSize: 15,
-                                  color: const Color.fromARGB(255, 29, 116, 92),
+                            SizedBox(height: 8),
+                            Text(
+                              'Ceritakan keluhan anda melalui tombol di bawah ini.',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChatAi(title: 'Chat AI'),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[200],
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
+                                child: Center(child: Text('Konsultasi Gratis')),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.local_hospital,
-                                color: Color.fromARGB(255, 115, 117, 115),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "Pengalaman: 101 tahun",
-                                style: GoogleFonts.spaceGrotesk(
-                                  fontSize: 15,
-                                  color: const Color.fromARGB(255, 29, 116, 92),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on,
-                                color: Color.fromARGB(255, 115, 117, 115),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "Jl. Pahlawan No. 123, Kota Bahagia",
-                                style: GoogleFonts.spaceGrotesk(
-                                  fontSize: 15,
-                                  color: const Color.fromARGB(255, 29, 116, 92),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
+              ),
+              SizedBox(height: 25),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Container(
+                  height: 80,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReservationPage(),
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: 'reservasiHero',
+                          child: CategoryCard(
+                            categoryName: 'Reservation',
+                            iconImagePath: "assets/images/Reservationdata.png",
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ScheduleListPage(),
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: 'jadwalHero',
+                          child: CategoryCard(
+                            categoryName: 'Schedule',
+                            iconImagePath: "assets/images/Schedule.png",
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatAi(title: 'Chat AI'),
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: 'konsultasiHero',
+                          child: CategoryCard(
+                            categoryName: 'Consultation',
+                            iconImagePath: "assets/images/Chatkonsul.png",
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    Widget cardContents;
-                    switch (index) {
-                      case 0:
-                        cardContents = GestureDetector(
-                          onTap: () {
-                            // Navigasi ke halaman "schedule" dengan pushNamed
-                            Navigator.pushNamed(context, '/schedule');
-                          },
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  "assets/images/Jadwal.jpg",
-                                  height: 150,
-                                  width: 150,
-                                ),
-                                Text(
-                                  "Jadwal Dokter",
-                                  style: GoogleFonts.spaceGrotesk(
-                                    fontSize: 15,
-                                    color:
-                                        const Color.fromARGB(255, 29, 116, 92),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                        break;
-                      case 1:
-                        cardContents = GestureDetector(
-                          onTap: () {
-                            // Navigasi ke halaman "reservation" dengan pushNamed
-                            Navigator.pushNamed(context, '/reservation');
-                          },
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  "assets/images/Janji.jpg",
-                                  height: 150,
-                                  width: 150,
-                                ),
-                                Text(
-                                  "Reservation",
-                                  style: GoogleFonts.spaceGrotesk(
-                                    fontSize: 15,
-                                    color:
-                                        const Color.fromARGB(255, 29, 116, 92),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                        break;
-                      case 2:
-                        cardContents = GestureDetector(
-                          onTap: () {
-                            // Navigasi ke halaman "chatmassege" dengan pushNamed
-                            Navigator.pushNamed(context, '/chatmessage');
-                          },
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  "assets/images/Chatbot.jpg",
-                                  height: 150,
-                                  width: 150,
-                                ),
-                                Text(
-                                  "Chat Massege",
-                                  style: GoogleFonts.spaceGrotesk(
-                                    fontSize: 15,
-                                    color:
-                                        const Color.fromARGB(255, 29, 116, 92),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                        break;
-                      default:
-                        cardContents = Container(); // Default empty container
-                    }
-                    return cardContents;
-                  },
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: 25),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Available Doctor',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      'See all',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 25),
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        DoctorCard(
+                          doctorImagePath: "assets/images/Drnorma.png",
+                          rating: '4.9',
+                          doctorName: 'drg. Norma Yustisiana, Sp.Pros',
+                          doctorProfession:
+                              'Dokter Gigi Spesialis Prostodonsia',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

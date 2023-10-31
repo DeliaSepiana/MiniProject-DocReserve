@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ReservationData {
-  final String name;
-  final DateTime date;
-  final TimeOfDay time;
-  final String description;
+  String name;
+  DateTime date;
+  TimeOfDay time;
+  String description;
 
   ReservationData({
     required this.name,

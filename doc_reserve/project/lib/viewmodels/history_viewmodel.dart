@@ -1,13 +1,21 @@
-import 'package:project/models/history.dart';
+import 'package:flutter/material.dart';
 
-class HistoryViewModel {
+class HistoryModel {
+  String historyData;
+
+  HistoryModel(this.historyData);
+}
+
+class HistoryViewModel with ChangeNotifier {
   List<HistoryModel> _history = [];
 
   List<HistoryModel> get history => _history;
 
   // Tambahkan history ke dalam list
-  void addHistory(HistoryModel historyModel) {
-    _history.add(historyModel);
+  void addHistory(String historyData) {
+    final newHistory = HistoryModel(historyData);
+    _history.add(newHistory);
+    notifyListeners();
   }
 
   // Dapatkan semua history yang tersimpan
@@ -18,5 +26,6 @@ class HistoryViewModel {
   // Bersihkan semua history
   void clearHistory() {
     _history.clear();
+    notifyListeners();
   }
 }

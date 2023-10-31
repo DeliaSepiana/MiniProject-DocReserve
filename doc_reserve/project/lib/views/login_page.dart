@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:project/viewmodels/login_viewmodel.dart';
-import 'package:provider/provider.dart';
+import 'package:project/utils/api_login.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,78 +7,58 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool _isObscured = true;
+  bool isSignUpView = false;
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<LoginViewModel>(context);
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 251, 252, 251),
+      backgroundColor: Colors.blue,
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Image.asset(
-              //   'assets/images/Logo.png',
-              //   width: 200, // Sesuaikan dengan lebar logo yang diinginkan
-              // ),
-              const SizedBox(
-                  height: 40), // Penambahan ruang antara logo dan input fields
+              SizedBox(height: 40),
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 238, 192, 198),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
+                      offset: Offset(0, 3),
                     ),
                   ],
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      'Username',
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 16,
-                        color: const Color.fromARGB(255, 29, 116, 92),
-                      ),
-                    ),
-                    TextField(
-                      onChanged: viewModel.setUsername,
-                      decoration: const InputDecoration(
+                    TextFormField(
+                      controller: usernameController,
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: Color.fromARGB(
-                                  255, 29, 116, 92)), // Warna border saat fokus
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Password',
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 16,
-                        color: const Color.fromARGB(255, 29, 116, 92),
-                      ),
-                    ),
-                    TextField(
+                    SizedBox(height: 20),
+                    TextFormField(
                       controller: passwordController,
-                      onChanged: viewModel.setPassword,
                       obscureText: _isObscured,
                       decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        focusedBorder: const OutlineInputBorder(
+                        border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color.fromARGB(
-                                255, 29, 116, 92), // Warna border saat fokus
+                            color: Colors.blue,
                           ),
                         ),
                         suffixIcon: IconButton(
@@ -88,11 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                             _isObscured
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: _isObscured
-                                ? Colors
-                                    .grey // Warna ikon saat teks tersembunyi
-                                : const Color.fromARGB(255, 29, 116,
-                                    92), // Warna ikon saat teks terlihat
+                            color: _isObscured ? Colors.grey : Colors.blue,
                           ),
                           onPressed: () {
                             setState(() {
@@ -102,101 +76,63 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 14),
-                      child: Text(
-                        'Please insert your username and password.',
-                        style: GoogleFonts.spaceGrotesk(
-                          fontSize: 12,
-                          color: const Color.fromARGB(255, 29, 116, 92),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double
-                          .infinity, // Mengisi lebar Container sepanjang parent
+                    SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: viewModel.isValid()
-                            ? () async {
-                                bool isLoggedIn = await viewModel.login();
-                                if (isLoggedIn) {
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pushNamed(context, '/');
-                                } else {
-                                  // ignore: use_build_context_synchronously
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                          'Login Failed',
-                                          style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 29, 116, 92),
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        content: const Text(
-                                          'Invalid username or password. Please try again.',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: const Text(
-                                              'OK',
-                                              style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 29, 116, 92),
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }
-                              }
-                            : null,
-                        icon: const Icon(Icons.person),
+                        onPressed: () {
+                          final username = usernameController.text;
+                          final password = passwordController.text;
+
+                          if (isSignUpView) {
+                            signUp(username, password);
+                          } else {
+                            login(username, password);
+                          }
+                        },
+                        icon: Icon(Icons.person),
                         label: Text(
-                          'Login',
-                          style: GoogleFonts.spaceGrotesk(
+                          isSignUpView ? 'Sign Up' : 'Login',
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: const Color.fromARGB(
-                              255, 29, 116, 92), // Warna teks tombol
-                          elevation: 5, // Ketebalan bayangan saat ditekan
+                          primary: Colors.blue,
+                          onPrimary: Colors.white,
+                          elevation: 5,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                15), // Mengatur sudut tombol
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          shadowColor: Colors.black, // Warna bayangan tombol
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15,
-                              horizontal: 30), // Padding dalam tombol
-                          tapTargetSize: MaterialTapTargetSize
-                              .padded, // Area tap target yang lebih besar
-                          animationDuration: const Duration(
-                              milliseconds:
-                                  200), // Durasi animasi ketika tombol ditekan
-                          textStyle:
-                              const TextStyle(fontSize: 16), // Border tombol
+                          shadowColor: Colors.blue,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 30,
+                          ),
+                          tapTargetSize: MaterialTapTargetSize.padded,
+                          animationDuration: Duration(milliseconds: 200),
+                          textStyle: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          if (isSignUpView) {
+                            isSignUpView = false;
+                          } else {
+                            isSignUpView = !isSignUpView;
+                          }
+                        });
+                      },
+                      child: Text(
+                        isSignUpView
+                            ? 'Sudah punya akun? Login'
+                            : 'Belum punya akun? Sign up',
+                        style: TextStyle(
+                          color: isSignUpView ? Colors.blue : Colors.blue,
                         ),
                       ),
                     ),
@@ -208,5 +144,40 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> signUp(String username, String password) async {
+    print('Signing up with Username: $username, Password: $password');
+    // Implementasi sign-up Anda di sini
+  }
+
+  Future<void> login(String username, String password) async {
+    final api = ApiLogin();
+    final isInputValid = await api.inputCheck(username, password);
+
+    if (isInputValid) {
+      // Login berhasil, lanjutkan ke halaman beranda atau lakukan tindakan yang sesuai.
+      Navigator.pushReplacementNamed(context, '/');
+    } else {
+      // Login gagal, tampilkan pesan kesalahan atau ambil tindakan lain sesuai kebutuhan.
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Login Gagal'),
+            content: Text('Username atau password salah. Silakan coba lagi.'),
+            actions: <Widget>[
+              TextButton(
+                // Ganti FlatButton menjadi TextButton
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class WelcomeViewModel {
-  void goToLoginPage(BuildContext context) {
-    Navigator.pushNamed(context, '/login');
-  }
-}
+// class WelcomeViewModel {
+//   void goToLoginPage(BuildContext context) {
+//     Navigator.pushNamed(context, '/login');
+//   }
+// }
