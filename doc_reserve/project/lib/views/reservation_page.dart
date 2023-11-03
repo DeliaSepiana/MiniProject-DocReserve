@@ -18,6 +18,10 @@ class _ReservationPageState extends State<ReservationPage> {
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
   bool _formSubmitted = false;
+  String _nameValidationError = '';
+  String _descriptionValidationError = '';
+  String _dateValidationError = '';
+  String _timeValidationError = '';
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -49,12 +53,57 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   Future<void> _submitForm() async {
-    // Ambil data reservasi yang sudah ada
     final historySharedPreferencesUtils = HistorySharedPreferencesUtils();
     final existingReservations =
         await historySharedPreferencesUtils.getReservations();
 
-    // Buat data reservasi baru
+    setState(() {
+      _nameValidationError = '';
+      _descriptionValidationError = '';
+      _dateValidationError = ''; // Inisialisasi pesan validasi tanggal
+      _timeValidationError = ''; // Inisialisasi pesan validasi waktu
+    });
+
+    if (_nameController.text.isEmpty) {
+      setState(() {
+        _nameValidationError = 'Nama tidak boleh kosong';
+      });
+    }
+
+    if (_descriptionController.text.isEmpty) {
+      setState(() {
+        _descriptionValidationError = 'Deskripsi tidak boleh kosong';
+      });
+    }
+
+    // Validasi tanggal
+    if (_selectedDate.isBefore(DateTime.now())) {
+      setState(() {
+        _dateValidationError = 'Tanggal tidak boleh sebelum hari ini';
+      });
+    }
+
+    // Validasi waktu
+    if (_selectedDate.isBefore(DateTime.now()) ||
+        (_selectedDate.isAtSameMomentAs(DateTime.now()) &&
+            (_selectedTime.hour < TimeOfDay.now().hour ||
+                (_selectedTime.hour == TimeOfDay.now().hour &&
+                    _selectedTime.minute <= TimeOfDay.now().minute)))) {
+      setState(() {
+        _timeValidationError = 'Waktu tidak boleh sebelum waktu saat ini';
+      });
+    }
+
+    if (_nameController.text.isEmpty ||
+        _descriptionController.text.isEmpty ||
+        _dateValidationError
+            .isNotEmpty || // Periksa apakah ada pesan validasi tanggal
+        _timeValidationError.isNotEmpty) {
+      // Periksa apakah ada pesan validasi waktu
+      return; // Prevent form submission if validation fails.
+    }
+
+    // Create a new reservation and add it to the list.
     final newReservation = ReservationData(
       name: _nameController.text,
       date: _selectedDate,
@@ -62,17 +111,14 @@ class _ReservationPageState extends State<ReservationPage> {
       description: _descriptionController.text,
     );
 
-    // Tambahkan data reservasi baru ke data yang sudah ada
     setState(() {
       _formSubmitted = true;
       reservations.add(newReservation);
     });
 
-    // Simpan data reservasi ke SharedPreferences
     existingReservations.add(newReservation);
     await historySharedPreferencesUtils.saveReservations(existingReservations);
 
-    // Tampilkan pesan konfirmasi setelah formulir berhasil disubmit
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -86,8 +132,7 @@ class _ReservationPageState extends State<ReservationPage> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context)
-                    .pop(); // Tutup dialog setelah tombol OK ditekan
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -218,95 +263,126 @@ class _ReservationPageState extends State<ReservationPage> {
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.blue,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _nameController,
+                              decoration: InputDecoration(
+                                labelText: "Nama",
+                                hintText: "Masukkan Nama Anda",
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    child: TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        labelText: "Nama",
-                        hintText: "Masukkan Nama Anda",
-                        border: InputBorder.none,
+                      Text(
+                        _nameValidationError,
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.blue,
+                      SizedBox(height: 20),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        child: ListTile(
+                          title: Text("Tanggal",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          subtitle: Text('${_selectedDate.toLocal()}'),
+                          trailing: Icon(
+                            LineIcons.calendar,
+                            color: Colors.blue,
+                          ),
+                          onTap: () => _selectDate(),
+                        ),
                       ),
-                    ),
-                    child: ListTile(
-                      title: Text("Tanggal",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle:
-                          Text('${_selectedDate.toLocal()}'.split(' ')[0]),
-                      trailing: Icon(
-                        LineIcons.calendar,
-                        color: Colors.blue,
+                      Text(
+                        _dateValidationError,
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
                       ),
-                      onTap: () => _selectDate(),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.blue,
+                      SizedBox(height: 20),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        child: ListTile(
+                          title: Text("Waktu",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          subtitle: Text(_selectedTime.format(context)),
+                          trailing: Icon(
+                            LineIcons.clock,
+                            color: Colors.blue,
+                          ),
+                          onTap: () => _selectTime(),
+                        ),
                       ),
-                    ),
-                    child: ListTile(
-                      title: Text("Waktu",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(_selectedTime.format(context)),
-                      trailing: Icon(
-                        LineIcons.clock,
-                        color: Colors.blue,
+                      Text(
+                        _timeValidationError,
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
                       ),
-                      onTap: () => _selectTime(),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.blue,
+                      SizedBox(height: 20),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _descriptionController,
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                labelText: "Keluhan Penyakit",
+                                hintText: "Deskripsikan keluhan penyakit Anda",
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    child: TextFormField(
-                      controller: _descriptionController,
-                      maxLines: 3,
-                      decoration: InputDecoration(
-                        labelText: "Keluhan Penyakit",
-                        hintText: "Deskripsikan keluhan penyakit Anda",
-                        border: InputBorder.none,
+                      Text(
+                        _descriptionValidationError,
+                        style: TextStyle(
+                          color: Colors.red,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 if (_formSubmitted)

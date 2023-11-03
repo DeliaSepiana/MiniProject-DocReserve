@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomeViewModel {
-  int selectedTabIndex = 0; // Menyimpan indeks tab yang dipilih
+  int selectedTabIndex = 0;
 
   void goToHistoryPage(BuildContext context) {
     // Navigasi ke halaman "History"

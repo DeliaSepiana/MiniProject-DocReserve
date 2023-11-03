@@ -24,11 +24,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Dokter Reservasi',
-        initialRoute: '/',
+        initialRoute: '/login',
         routes: {
           '/': (context) => BottomNav(),
           '/login': (context) => LoginPage(),
-          '/home': (context) => HomePage(key: UniqueKey()),
+          '/home': (context) => HomePage(),
           '/history': (context) => const ReservationPage(),
           '/schedule': (context) => const ScheduleListPage(),
           '/reservation': (context) => const ReservationPage(),

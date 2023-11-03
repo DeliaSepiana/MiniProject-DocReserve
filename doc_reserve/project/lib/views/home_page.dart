@@ -11,7 +11,7 @@ import 'package:project/views/schedule_list_page.dart';
 class HomePage extends StatefulWidget {
   final HomeViewModel viewModel = HomeViewModel();
 
-  HomePage({required Key key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                ProfilePage(), // Navigasi ke halaman profil
+                                ProfilePage(), // Gantilah '123' dengan nilai ID pengguna yang sesuai
                           ),
                         );
                       },

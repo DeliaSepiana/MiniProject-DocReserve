@@ -25,7 +25,6 @@ class DoctorCard extends StatelessWidget {
             SizedBox(
               height: 25,
             ),
-            // Doctor imagesImg
             ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.asset(
@@ -36,8 +35,6 @@ class DoctorCard extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-
-            // Ratting out of 5
             Row(
               children: [
                 Icon(
@@ -53,8 +50,6 @@ class DoctorCard extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-
-            // Doctor name
             Text(
               doctorName,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -62,8 +57,6 @@ class DoctorCard extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-
-            // Doctor title
             Text(doctorProfession + ' 7 y.e.'),
           ],
         ),

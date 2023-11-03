@@ -18,7 +18,7 @@ class _ChatAiState extends State<ChatAi> {
   TextEditingController pertanyaanController = TextEditingController();
 
   void _askGPT() async {
-    String apiKey = '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';
+    String apiKey = '';
     Dio dio = Dio(BaseOptions(
       baseUrl: 'https://api.openai.com/v1',
       headers: {
@@ -73,11 +73,11 @@ class _ChatAiState extends State<ChatAi> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
                     children: [
                       Row(
@@ -125,150 +125,151 @@ class _ChatAiState extends State<ChatAi> {
                     ],
                   ),
                 ),
-              ),
-              SizedBox(height: 30),
-              // Docs Profile
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Row(children: [
-                    Container(
-                      child: Row(children: [
-                        //animasi atau gambar
-                        Container(
-                          height: 100,
-                          width: 100,
-                          child: Lottie.network(
-                              'https://lottie.host/8fa3c648-163a-49d2-981e-5ed194e64e12/mnKVtijzqy.json'),
-                        )
-                      ]),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    // button
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Butuh Solusi',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'jangan ragu tanyakan sekarang',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          SizedBox(height: 8),
-                          GestureDetector(
-                            onTap: () {
-                              // Aksi yang akan dijalankan saat CategoryCard diklik
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ReservationPage(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.blue[200],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Center(child: Text('Konsultasi Gratis')),
-                            ),
+                SizedBox(height: 30),
+                // Docs Profile
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Row(children: [
+                      Container(
+                        child: Row(children: [
+                          //animasi atau gambar
+                          Container(
+                            height: 100,
+                            width: 100,
+                            child: Lottie.network(
+                                'https://lottie.host/8fa3c648-163a-49d2-981e-5ed194e64e12/mnKVtijzqy.json'),
                           )
-                        ],
+                        ]),
                       ),
-                    )
-                  ]),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      // button
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Butuh Solusi',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'jangan ragu tanyakan sekarang',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () {
+                                // Aksi yang akan dijalankan saat CategoryCard diklik
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ReservationPage(),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[200],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Center(child: Text('Konsultasi Gratis')),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ]),
+                  ),
                 ),
-              ),
-              // Form Pertanyaan
-              Container(
-                margin: EdgeInsets.all(16.0),
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.blue),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Text(
-                      'Pertanyaan Anda',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    TextField(
-                      controller: pertanyaanController,
-                      decoration: InputDecoration(
-                        labelText: 'Masukkan pertanyaan',
-                        contentPadding: EdgeInsets.all(12.0),
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        _askGPT();
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.blue),
-                        padding:
-                            MaterialStateProperty.all(EdgeInsets.all(16.0)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
+                // Form Pertanyaan
+                Container(
+                  margin: EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(color: Colors.blue),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        'Pertanyaan Anda',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      child: Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.white),
+                      SizedBox(height: 16.0),
+                      TextField(
+                        controller: pertanyaanController,
+                        decoration: InputDecoration(
+                          labelText: 'Masukkan pertanyaan',
+                          contentPadding: EdgeInsets.all(12.0),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              // Jawaban
-              Container(
-                margin: EdgeInsets.all(16.0),
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.blue),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Text(
-                      "Jawaban",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                      SizedBox(height: 16.0),
+                      ElevatedButton(
+                        onPressed: () {
+                          _askGPT();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                          padding:
+                              MaterialStateProperty.all(EdgeInsets.all(16.0)),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 16.0),
-                    Text(
-                      jawaban,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                // Jawaban
+                Container(
+                  margin: EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(color: Colors.blue),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        "Jawaban",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        jawaban,
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

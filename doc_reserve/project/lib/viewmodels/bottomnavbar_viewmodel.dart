@@ -20,7 +20,7 @@ class BottomNavBarModel extends ChangeNotifier {
     } else if (_currentIndex == 1) {
       return HistoryPage();
     }
-    // Tambahkan halaman lain jika diperlukan
+
     return Container();
   }
 

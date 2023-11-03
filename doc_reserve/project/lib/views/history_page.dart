@@ -13,6 +13,14 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   List<ReservationData> reservations = [];
   bool _dataLoaded = false;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  TextEditingController descriptionController = TextEditingController();
+  String _nameValidationError = '';
+  String _dateValidationError = '';
+  String _timeValidationError = '';
+  String _descriptionValidationError = '';
 
   @override
   void initState() {
@@ -21,8 +29,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Future<void> _loadReservations() async {
-    final historySharedPreferencesUtils =
-        HistorySharedPreferencesUtils(); // Membuat instance objek
+    final historySharedPreferencesUtils = HistorySharedPreferencesUtils();
 
     final loadedReservations =
         await historySharedPreferencesUtils.getReservations();
@@ -219,7 +226,6 @@ class _HistoryPageState extends State<HistoryPage> {
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
-              // Handle error if there's any
               return AlertDialog(
                 title: Text('Error'),
                 content: Text('An error occurred: ${snapshot.error}'),
@@ -248,13 +254,10 @@ class _HistoryPageState extends State<HistoryPage> {
             } else {
               final reservations = snapshot.data!;
               final selectedReservation = reservations[index];
-              TextEditingController nameController =
-                  TextEditingController(text: selectedReservation.name);
-              TextEditingController dateController = TextEditingController(
-                  text: selectedReservation.date.toString());
-              TimeOfDay selectedTime = selectedReservation.time;
-              TextEditingController descriptionController =
-                  TextEditingController(text: selectedReservation.description);
+              nameController.text = selectedReservation.name;
+              dateController.text = selectedReservation.date.toString();
+              selectedTime = selectedReservation.time;
+              descriptionController.text = selectedReservation.description;
 
               return AlertDialog(
                 title: Text('Edit Reservation'),
@@ -267,8 +270,9 @@ class _HistoryPageState extends State<HistoryPage> {
                         controller: nameController,
                         decoration: InputDecoration(labelText: 'Name'),
                       ),
+                      Text(_nameValidationError,
+                          style: TextStyle(color: Colors.red)),
                       SizedBox(height: 16),
-                      Text('Date:'),
                       TextFormField(
                         controller: dateController,
                         decoration: InputDecoration(labelText: 'Date'),
@@ -276,9 +280,10 @@ class _HistoryPageState extends State<HistoryPage> {
                           DateTime? selectedDate = await showDatePicker(
                             context: context,
                             initialDate: selectedReservation.date,
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2101),
+                            firstDate: DateTime(DateTime.now().year - 5),
+                            lastDate: DateTime(DateTime.now().year + 5),
                           );
+
                           if (selectedDate != null) {
                             setState(() {
                               selectedReservation.date = selectedDate;
@@ -288,8 +293,9 @@ class _HistoryPageState extends State<HistoryPage> {
                           }
                         },
                       ),
+                      Text(_dateValidationError,
+                          style: TextStyle(color: Colors.red)),
                       SizedBox(height: 16),
-                      Text('Time:'),
                       GestureDetector(
                         onTap: () async {
                           TimeOfDay? newTime = await showTimePicker(
@@ -312,14 +318,70 @@ class _HistoryPageState extends State<HistoryPage> {
                           ],
                         ),
                       ),
+                      Text(_timeValidationError,
+                          style: TextStyle(color: Colors.red)),
                       SizedBox(height: 16),
                       TextFormField(
                         controller: descriptionController,
                         decoration: InputDecoration(labelText: 'Description'),
                       ),
+                      Text(_descriptionValidationError,
+                          style: TextStyle(color: Colors.red)),
                       SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () async {
+                          setState(() {
+                            _nameValidationError = '';
+                            _dateValidationError = '';
+                            _timeValidationError = '';
+                            _descriptionValidationError = '';
+                          });
+
+                          if (nameController.text.isEmpty) {
+                            setState(() {
+                              _nameValidationError = 'Name cannot be empty';
+                            });
+                          }
+
+                          if (dateController.text.isEmpty) {
+                            setState(() {
+                              _dateValidationError = 'Date cannot be empty';
+                            });
+                          } else {
+                            DateTime selectedDate =
+                                DateTime.parse(dateController.text);
+                            if (selectedDate.isBefore(DateTime.now())) {
+                              setState(() {
+                                _dateValidationError =
+                                    'Date cannot be before today';
+                              });
+                            }
+                          }
+
+                          if (selectedTime.hour < TimeOfDay.now().hour ||
+                              (selectedTime.hour == TimeOfDay.now().hour &&
+                                  selectedTime.minute <
+                                      TimeOfDay.now().minute)) {
+                            setState(() {
+                              _timeValidationError =
+                                  'Time cannot be before the current time';
+                            });
+                          }
+
+                          if (descriptionController.text.isEmpty) {
+                            setState(() {
+                              _descriptionValidationError =
+                                  'Description cannot be empty';
+                            });
+                          }
+
+                          if (nameController.text.isEmpty ||
+                              _dateValidationError.isNotEmpty ||
+                              _timeValidationError.isNotEmpty ||
+                              descriptionController.text.isEmpty) {
+                            return;
+                          }
+
                           selectedReservation.name = nameController.text;
                           selectedReservation.date =
                               DateTime.parse(dateController.text);
@@ -335,7 +397,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           Navigator.of(context).pop();
                         },
                         child: Text('Save Changes'),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -363,7 +425,6 @@ class _HistoryPageState extends State<HistoryPage> {
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
-              // Handle error if there's any
               return AlertDialog(
                 title: Text('Error'),
                 content: Text('An error occurred: ${snapshot.error}'),
